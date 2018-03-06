@@ -15,7 +15,7 @@ public class TestTask {
     /**
      * 每小时的10分执行该方法
      */
-    @Scheduled(cron = "0/3 * * * * ?")
+    //@Scheduled(cron = "0/3 * * * * ?")
     public void cron() throws Exception
     {
         System.out.println("执行测试cron时间："+ new Date(System.currentTimeMillis()));
