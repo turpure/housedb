@@ -251,51 +251,56 @@ public  class ProcessServiceImpl implements ProcessService{
 	}
 
 //	@Deprecated
-//	@Override
-//	public void fetchHouseDetail() throws InterruptedException {
-//		int pageNo = 1;
-//		int pageSize = 300;
-//		boolean stop = false;
-//		while (!stop) {
-//			//分页获取 hasDetail 状态为 0  的 houseindex
-//			List<Houseindex> houseindexList = houseindexService.listTodayHasNotDetail(pageNo, pageSize);
-//			if(houseindexList==null ||  houseindexList.size()==0)
-//				break;
-//			//fetch detail
-//			for (int i = 0; i < houseindexList.size(); i++) {
-//				Houseindex h = houseindexList.get(i);
-//				logger.info(JSONObject.toJSONString(h));
-//				House house = LianjiaWebUtil.fetchAndGenHouseObject(h.getUrl());
-//				//Thread.sleep(interval);
-//				if(StringUtils.isEmpty(house.getTitle())|| StringUtils.isBlank(house.getTitle())){
-//					logger .info("house title is null "+JSONObject.toJSONString(house));
-////					h.setStatus(-2);
-////					h.setUpdatetime(new Date());
-////					h.setHasdetail(1);
-////					houseindexService.update(h);
-//					continue;
-//				}else{
-//					if(h.getStatus()==0 || h.getStatus()==1){
-//						//insert into db
-//						houseService.save(house);
-//						h.setStatus(1);
-//						h.setUpdatetime(new Date());
-//						h.setHasdetail(1);
-//						houseindexService.update(h);
-//						logger.info("saving selling house:"+ JSONObject.toJSONString(house));
-//					}else{
-//						//insert into db
-//						h.setStatus(2);
-//						h.setUpdatetime(new Date());
-//						h.setHasdetail(1);
-//						houseindexService.update(h);
-//						logger.info("saving sold house:"+ JSONObject.toJSONString(house));
-//					}
-//				}
-//			}
-//		}
-//
-//	}
+	@Override
+	public void fetchHouseDetail() throws InterruptedException {
+		int pageNo = 1;
+		int pageSize = 300;
+		boolean stop = false;
+		while (!stop) {
+			//分页获取 hasDetail 状态为 0  的 houseindex
+			List<Houseindex> houseindexList = houseindexService.listTodayHasNotDetail(pageNo, pageSize);
+			if(houseindexList==null ||  houseindexList.size()==0)
+				break;
+			//fetch detail
+			for (int i = 0; i < houseindexList.size(); i++) {
+                Houseindex h = houseindexList.get(i);
+                logger.info(JSONObject.toJSONString(h));
+                try {
+                    House house = LianjiaWebUtil.fetchAndGenHouseObject(h.getUrl());
+                //Thread.sleep(interval);
+                    if (StringUtils.isEmpty(house.getTitle()) || StringUtils.isBlank(house.getTitle())) {
+                        logger.info("house title is null " + JSONObject.toJSONString(house));
+    					h.setStatus(-2);
+    					h.setUpdatetime(new Date());
+    					h.setHasdetail(1);
+    					houseindexService.update(h);
+                        continue;
+                    } else {
+                        if (h.getStatus() == 0 || h.getStatus() == 1) {
+                            //insert into db
+                            houseService.save(house);
+                            h.setStatus(1);
+                            h.setUpdatetime(new Date());
+                            h.setHasdetail(1);
+                            houseindexService.update(h);
+                            logger.info("saving selling house:" + JSONObject.toJSONString(house));
+                        } else {
+                            //insert into db
+                            h.setStatus(2);
+                            h.setUpdatetime(new Date());
+                            h.setHasdetail(1);
+                            houseindexService.update(h);
+                            logger.info("saving sold house:" + JSONObject.toJSONString(house));
+                        }
+                    }
+            }
+            catch (Exception e) {
+
+            }
+			}
+		}
+
+	}
 
 	/**
 	 * 按照天为单位, 对在售 house 做检查
