@@ -27,7 +27,7 @@ public class TestTimeTask{
     /**
      * 根据当天的执行任务，按最小区域（车陂、华景）分页获取房屋链接地址，入库 houseindex
      */
-    @Scheduled(cron="0 0/5 * * * ?")   //每5分钟执行一次
+//    @Scheduled(cron="0 0/5 * * * ?")   //每5分钟执行一次
     public void exe() {
         log.info("开始执行houseUrlsFetching...");
         try {

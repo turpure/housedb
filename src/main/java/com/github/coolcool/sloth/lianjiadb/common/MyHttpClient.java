@@ -21,7 +21,7 @@ public abstract class MyHttpClient {
 
     public static int ALLOCATE_VALUE = 10;
 
-    public static  boolean available = false;
+    public static  boolean available = true;
 
     public static List<HttpProxyConfig> allHttpProxyConfigs = new ArrayList<>();//所有的
     public static List<HttpProxyConfig> availableHttpProxyConfigs = new ArrayList<>();//目前可用
